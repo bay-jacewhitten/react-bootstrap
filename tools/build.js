@@ -92,6 +92,10 @@ console.log(
   green(`Building targets: ${targets.length ? targets.join(', ') : 'all'}\n`),
 );
 
+const copyLib = step('Copying directories', () =>
+  fse.copySync(libRoot, '../bayui/dist/lib', { overwrite: true }),
+);
+
 clean();
 
 Promise.resolve(true)
@@ -104,6 +108,7 @@ Promise.resolve(true)
     ]),
   )
   .then(buildDirectories)
+  .then(copyLib)
   .catch((err) => {
     if (err) console.error(red(err.stack || err.toString()));
     process.exit(1);
